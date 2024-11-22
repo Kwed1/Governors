@@ -10,6 +10,7 @@ function App() {
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const haveHeader = true;
   const activeTab = null;
+
   useEffect(() => {
     const removeListener = on('viewport_changed', (payload) => {
       setViewportHeight(payload.height);
@@ -22,16 +23,17 @@ function App() {
   }, []);
 
   interface TelegramWebApp {
+    requestFullscreen: () => void
     close: () => void;
     expand: () => void
   }
   
   const tg: TelegramWebApp = (window as any).Telegram.WebApp;
   useEffect(() => {
-          if (tg && tg.expand) {
-              tg.expand();
-          }
-        }, []);
+      if (tg && tg.requestFullscreen) {
+          tg.requestFullscreen();
+      }
+  }, []);
 
   return (
     <TonConnectUIProvider

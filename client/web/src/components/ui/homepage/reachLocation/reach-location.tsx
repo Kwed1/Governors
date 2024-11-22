@@ -123,7 +123,7 @@ export default function ReachLocation({locationInfo}:Props) {
 			<div>
 			<p className='text-myColors-250 text-lg font-bold pt-1'>{t('physicalDescr')}</p>
 			</div>
-			<div className='bg-myColors2-50 p-2 flex items-center justify-center rounded-[20px] flex-col w-[50px] h-[50px]'>
+			<div className='bg-myColors2-50 p-2 flex items-center justify-center rounded-[20px] flex-col'>
 				<div 
 				className={styles.flicker}/>
 				<p className='text-myColors-250 font-bold'>{locationInfo?.claimed_count}/{locationInfo?.claimed_need_to_reward}</p>

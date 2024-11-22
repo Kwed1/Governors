@@ -7,8 +7,12 @@ export const abbreviateNumber = (value: number): string => {
     suffixIndex++;
   }
 
-  // Если число меньше 1000, вернуть его как есть, иначе округлить до двух знаков
-  const roundedValue = suffixIndex === 0 ? value : value.toFixed(2);
+  // Всегда округляем до 2 знаков после запятой, если дробная часть есть
+  const roundedValue =
+    suffixIndex === 0
+      ? parseFloat(value.toFixed(2))
+      : parseFloat(value.toFixed(2));
 
-  return roundedValue + suffixes[suffixIndex];
+  // Формируем строку с соответствующим суффиксом
+  return `${roundedValue}${suffixes[suffixIndex]}`;
 };
