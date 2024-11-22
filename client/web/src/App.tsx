@@ -5,7 +5,7 @@ import { ErrorProvider, useError } from "./requestProvider/errorContext"
 import ErrorSnackbar from './requestProvider/errorSnackbar'
 import Router from './router/router'
 function App() {
-  // init()
+  init()
   const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const haveHeader = true;
