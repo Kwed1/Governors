@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+  api:
+    build:
+      context: ../backend/api/
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    command: ['uvicorn', 'main:app', '--host', '0.0.0.0', '--port', '8000']
+    networks:
+      - app_network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - '8080:80'
+    volumes:
+      - ./nginx-config:/etc/nginx/conf.d
+      - ../client/web/build:/usr/share/nginx/html
+    networks:
+      - app_network
+    restart: always
+
+  react:
+    build:
+      context: ../client/web/
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      - app_network
+
+  telegram-bot:
+    build:
+      context: ../client/telegram/
+      dockerfile: Dockerfile
+    ports:
+      - '8443:8443'
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

@@ -1,0 +1,87 @@
+/* map.css */
+
+/* map.css */
+
+.leaflet-container {
+	background-color: black !important;
+}
+
+.custom-marker {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: red;
+	border-radius: 50%;
+	box-shadow: 0 0 12px red;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	animation: blink 1s infinite;
+	color: white;
+	font-size: 12px;
+}
+
+.marker-text {
+	position: absolute;
+	bottom: -20px;
+	right: 9px;
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+	color: white;
+}
+
+.user-marker {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background-color: rgb(45, 45, 255);
+	border: 1px solid white;
+}
+
+.blinking-marker {
+	background-color: red; /* Цвет мигающей метки */
+	border-radius: 50%;
+	width: 12px;
+	height: 12px;
+	box-shadow: 0 0 10px red; /* Эффект свечения */
+	border: 2px solid red; /* Цвет границы */
+	animation: blink 1s infinite; /* Анимация мигания */
+}
+
+.royal-marker {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: red;
+	border-radius: 50%;
+	box-shadow: 0 0 12px red;
+	text-align: center;
+	animation: blink 1s infinite;
+	color: white;
+	font-size: 12px;
+}
+
+@keyframes blink {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+/* Изменение стиля фона всплывающего окна */
+.leaflet-popup-content-wrapper {
+	background-color: #191919;
+	border-radius: 10px;
+}
+
+.leaflet-popup-tip {
+	background-color: #333; /* Цвет стрелки всплывающего окна */
+}

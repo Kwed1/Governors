@@ -1,0 +1,124 @@
+.background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url('../images/homepage.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	z-index: -1;
+}
+
+.background::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: -1;
+}
+
+.backgroundCity {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url('../images/mycity/background/background.webp');
+	background-repeat: no-repeat;
+	background-size: contain;
+	z-index: -1;
+}
+
+.backgroundCity::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: -1;
+}
+
+.backgroundFriends {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url('../images/friends.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	z-index: -1;
+}
+
+.backgroundFriends::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: -1;
+}
+
+.backgroundAirdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url('../images/airdrop.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	z-index: -1;
+}
+
+.backgroundAirdrop::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: -1;
+}
+
+.backgroundReward {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url('../images/rewardbg.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	z-index: -1;
+}
+
+.backgroundReward::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: -1;
+}
+
+.backgroundSettings {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #1f1f1f;
+	z-index: -1;
+}

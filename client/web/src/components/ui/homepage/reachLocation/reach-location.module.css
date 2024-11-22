@@ -1,0 +1,23 @@
+.flicker {
+	display: block;
+	background-color: red;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	aspect-ratio: 1;
+	box-shadow: 0 0 10px red;
+	border: 5px solid red;
+	animation: blink 2s infinite;
+}
+
+@keyframes blink {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 1;
+	}
+}
