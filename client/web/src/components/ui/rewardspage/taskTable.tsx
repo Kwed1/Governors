@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { missions } from '../../../models/missions'
 import useApi from '../../../requestProvider/apiHandler'
 import { ReactComponent as Arrow } from '../../images/arrow.svg'
+import { ReactComponent as Completed } from '../../images/Completed.svg'
 import { ReactComponent as Coin } from '../../images/homepage/coin.svg'
-import { ReactComponent as Completed } from '../../images/rewardspage/apply.svg'
 import boost from '../../images/rewardspage/boost.png'
 import { ReactComponent as Close } from '../../images/rewardspage/close.svg'
 import { ReactComponent as Discord } from '../../images/rewardspage/discord.svg'
@@ -219,7 +219,14 @@ const TaskTable = () => {
     }),
     hidden: {opacity: 0}
   }
-
+  const handleClick = (mission:infoTaskModal) => {
+    if (mission?.status !== 'Completed')
+    if (mission?.icon_type === 'Friend') {
+      navigate('/friends');
+    } else {
+      if (mission?.status) saveInfoForModal(mission.id, mission.name, mission.reward, mission.link, mission.status, mission.icon_type);
+    }
+  }
   return (
     <>
       <div className='h-[330px] h-md:h-[203px] h-xs:h-[135px] overflow-y-scroll'>
@@ -227,11 +234,7 @@ const TaskTable = () => {
           <motion.div key={mission.id} variants={listVariants} initial='hidden' custom={index} animate='visible'>
           <div className={`flex justify-between mt-2 items-center text-sm py-2 px-2 border-opacity-0 text-white bg-myColors-350 rounded-xl h-[60px]`}
               onTouchStart={() => {
-                if (mission.icon_type === 'Friend') {
-                  navigate('/friends');
-                } else {
-                  saveInfoForModal(mission.id, mission.name, mission.reward, mission.link, mission.status, mission.icon_type);
-                }
+                handleClick(mission)
               }}>
             <div className='flex gap-5 items-center ml-2'>
               <GetIcon icon={mission.icon_type} width={30} />
@@ -244,7 +247,8 @@ const TaskTable = () => {
               </div>
             </div>
 
-            <div>
+            <div className='flex gap-2 items-center'>
+              {mission?.status === 'Completed' && <Completed className='w-[24px] h-[24px] mb-[2px]'/>}
               <Arrow
                 className='w-[25px] h-[25px]'
                 
