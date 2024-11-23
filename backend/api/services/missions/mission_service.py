@@ -183,7 +183,8 @@ class MissionService:
         if user_inviter:
             inviter = (
                 await self.db.execute(select(User).filter(User.telegram_id == user_inviter.user_id))).scalars().first()
-            friends_paged_dto.user_inviter = inviter.username
+            if inviter is not None:
+                friends_paged_dto.user_inviter = inviter.username
 
         total_items_query = select(func.count(Friend.id)).filter(Friend.user_id == user.telegram_id)
         total_items_result = await self.db.execute(total_items_query)

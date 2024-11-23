@@ -48,7 +48,7 @@ const Airdroppage: React.FC = () => {
 
   return (
     <>
-    <div className={`fixed w-full h-[80vh] bg-myColors-100 rounded-t-[30px] bottom-0 `}>
+    <div className={`fixed w-full h-[78vh] bg-myColors-100 rounded-t-[30px] bottom-0 `}>
       
         <div className='h-[50px] items-center flex justify-center text-white text-2xl font-bold bg-myColors-100 rounded-t-[30px] gap-2'>
           <p className='mb-1'>{t('airdrop')}</p>

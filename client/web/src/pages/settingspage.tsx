@@ -49,7 +49,7 @@ const Settingspage = () => {
 	return (
 		<>
 		  <div className='backgroundSettings'/>
-			<div className="flex flex-col justify-center items-center">
+			<div className="flex flex-col justify-center items-center mt-[11vh]">
 			  
 				<div className='max-w-[350px] w-full text-white'>
 				<ArrowRight className='w-[30px] rotate-180 mt-5' style={{fill: 'white'}} onClick={() => navigate(-1)}/>

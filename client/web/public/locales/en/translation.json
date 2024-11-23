@@ -14,9 +14,9 @@
 	"rewardEarnCoin": "Earn <br/> more <br/> coins!",
 	"friends": "Friends",
 	"invFriend": "Invite a friend",
-	"invFriendDescr": "+50 coins for you and your friend",
+	"invFriendDescr": "+100 coins for you and your friend",
 	"invFriendPrem": "Invite a friend with Telegram Premium",
-	"invFriendPremDescr": "+250 coins for you and your friend",
+	"invFriendPremDescr": "+500 coins for you and your friend",
 	"inviteAFriend": "Invite a friend",
 	"myFriends": "My Friends",
 	"loading": "Loading...",
@@ -86,5 +86,6 @@
 	"linkCopied": "Link copied successfully!",
 	"yourInviter": "Your Inviter",
 	"claim": "Claim",
-	"earnedCoin": "Earned сoin"
+	"earnedCoin": "Earned сoin",
+	"generatedClaim": "You have successfully claimed {{gtCount}} GT and {{diamondsCount}} diamonds"
 }

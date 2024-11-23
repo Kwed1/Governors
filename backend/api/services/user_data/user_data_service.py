@@ -144,15 +144,15 @@ class UserDataService:
             if user is None:
                 continue
 
-            difference = user.data.current_coin - friend.last_claim
+            friend.last_claim = user.data.coin
+            difference = user.data.coin - friend.last_claim
             if difference < 0:
                 continue
 
             difference = difference * 0.1
             friend.bonus += difference
-            friend.last_claim = user.data.current_coin
-            user.data.current_coin += difference
-            await self.db.commit()
+            friend.last_claim = user.data.coin
+            user.data.coin += difference
 
     async def upgrade_status(self, user_id: id, total_amount: float):
         user = (await self.db.execute(
@@ -187,19 +187,19 @@ class UserDataService:
 
         copy_prices: list[Price] = [
             Price(
-                price=50, name='Diamond', discount=0,
+                price=5000, name='Diamond', discount=0,
                 bonus='Unlock 15 more buildings / 35%+GT per loc / 10 Virtual pickup per 24h / Remove building level up limit / All diamonds 2x'
                 ),
             Price(
-                price=10, name='Gold', discount=0,
+                price=1000, name='Gold', discount=0,
                 bonus='Unlock 15 more buildings  / 25%+GT per loc / 5 Virtual pickup per 24h / Remove building level up limit'
                 ),
             Price(
-                price=5, name='Silver', discount=0,
+                price=500, name='Silver', discount=0,
                 bonus='Unlock 10 more buildings / 15%+GT per loc / 3 Virtual pickup per 24h / Remove building level up limit'
                 ),
             Price(
-                price=1, name='Bronze', discount=0,
+                price=100, name='Bronze', discount=0,
                 bonus='Unlock 5 more buildings / 5%+GT per loc / 1 Virtual pickup per 24h'
                 ),
         ]

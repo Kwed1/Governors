@@ -22,7 +22,7 @@ export function UpdateMapCenter({ position }: { position: [number, number] }) {
 
   useEffect(() => {
     if (position && isInitialZoom) {
-      map.setView(position, 13)
+      map.setView(position, 18)
       setIsInitialZoom(false)
     }
   }, [position, map, isInitialZoom])

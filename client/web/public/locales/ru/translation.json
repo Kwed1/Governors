@@ -14,9 +14,9 @@
 	"rewardEarnCoin": "Заработай <br/> больше <br/> монет!",
 	"friends": "Друзья",
 	"invFriend": "Пригласить друга",
-	"invFriendDescr": "+50 монет для вас и вашего друга",
+	"invFriendDescr": "+100 монет для вас и вашего друга",
 	"invFriendPrem": "Пригласить друга с Telegram Premium",
-	"invFriendPremDescr": "+250 монет для вас и вашего друга",
+	"invFriendPremDescr": "+500 монет для вас и вашего друга",
 	"inviteAFriend": "Пригласить друга",
 	"myFriends": "Мои Друзья",
 	"loading": "Загрузка...",
@@ -84,5 +84,7 @@
 	"linkCopied": "Ссылка успешно скопирована!",
 	"yourInviter": "Вас пригласил",
 	"claim": "Забрать",
-	"earnedCoin": "Заработанные монеты"
+	"earnedCoin": "Заработанные монеты",
+	"generatedClaim": "Вы успешно получили {{gtCount}} GT и {{diamondsCount}} алмазов"
+
 }

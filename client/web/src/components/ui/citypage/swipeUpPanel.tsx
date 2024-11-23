@@ -19,7 +19,7 @@ interface SwipeUpPanelProps {
   height?: string
 }
 
-const SwipeUpPanel: React.FC<SwipeUpPanelProps> = ({ height = '85vh' }) => {
+const SwipeUpPanel: React.FC<SwipeUpPanelProps> = ({ height = '78vh' }) => {
   const [open, setOpen] = useState(false)
   const [visibleHeight, setVisibleHeight] = useState('')
   const panelRef = useRef<HTMLDivElement>(null)
@@ -48,11 +48,11 @@ const SwipeUpPanel: React.FC<SwipeUpPanelProps> = ({ height = '85vh' }) => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerHeight <= 670) {
-        setVisibleHeight('48vh')
+        setVisibleHeight('42vh')
       } else if (window.innerHeight <= 770) {
-        setVisibleHeight('51vh')
+        setVisibleHeight('47vh')
       } else {
-        setVisibleHeight('60vh')
+        setVisibleHeight('51vh')
       }
     }
     handleResize()
@@ -114,7 +114,7 @@ const SwipeUpPanel: React.FC<SwipeUpPanelProps> = ({ height = '85vh' }) => {
 
         <CityBuildingFilter filter={filter} setFilter={setFilter}/>
 
-        <div className={`grid grid-cols-2 gap-2 justify-items-center ${open ? 'pb-[165px]' : 'pb-[375px]'} w-full px-2 overflow-y-scroll overflow-x-hidden h-[calc(85vh-55px)] pt-1`}>
+        <div className={`grid grid-cols-2 gap-2 justify-items-center ${open ? 'pb-[25vh]' : 'pb-[53vh]'} w-full px-2 overflow-y-scroll overflow-x-hidden h-[calc(85vh-55px)] pt-1`}>
             {filteredBuildings.map((building, index) => (
             <div key={index} className='bg-myColors-750 flex flex-col rounded-lg w-[180px] h-[110px]'>
               <div className='flex gap-1 px-2 my-2'>

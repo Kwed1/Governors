@@ -40,14 +40,15 @@ module.exports = {
         myColors2: {
           50: "#1C1C1C",
           100: "#292929E8",
-          150: "#464646"
+          150: "#464646",
+          200: "#00000033"
         }
       },
       backgroundImage: {
         'gray-gradient': "linear-gradient(90deg, #404040 0%, #F7AE3B 100%)",
       },
       screens: {
-        'custom-sm': {'max': '390px'},
+        'custom-sm': {'max': '380px'},
         'custom-lg': {'min': '390px'},
         'custom-md': {'min': '414px'},
         'custom-xl': {'min': '430px'},

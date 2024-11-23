@@ -14,9 +14,9 @@
 	"rewardEarnCoin": "Hasilkan <br/> lebih <br/> banyak <br/> koin!",
 	"friends": "Teman",
 	"invFriend": "Undang teman",
-	"invFriendDescr": "+50 koin untuk anda dan teman anda",
+	"invFriendDescr": "+100 koin untuk anda dan teman anda",
 	"invFriendPrem": "Undang teman dengan Telegram Premium",
-	"invFriendPremDescr": "+250 koin untuk anda dan teman anda",
+	"invFriendPremDescr": "+500 koin untuk anda dan teman anda",
 	"inviteAFriend": "Undang teman",
 	"myFriends": "Teman saya",
 	"loading": "Loading...",
@@ -78,5 +78,6 @@
 	"linkCopied": "Tautan berhasil disalin!",
 	"yourInviter": "Anda diundang oleh",
 	"claim": "Ambil",
-	"earnedCoin": "Koin yang Diperoleh"
+	"earnedCoin": "Koin yang Diperoleh",
+	"generatedClaim": "Anda berhasil mengklaim {{gtCount}} GT dan {{diamondsCount}} berlian"
 }

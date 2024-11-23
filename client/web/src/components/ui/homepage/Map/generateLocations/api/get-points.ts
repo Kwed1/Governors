@@ -26,7 +26,6 @@ export default function GetPointsApi() {
 		})
 		return res
 	}
-
 	
 
 	const claimLocation = async(id:string) => {
@@ -36,5 +35,12 @@ export default function GetPointsApi() {
 		})
 		return res
 	}
-	return {setPoints, claimLocation, getPoints}
+	const claimVirtual = async(id:string) => {
+		const res = await api<getGenerated>({
+			url: `/game/virtual_claim/${id}`,
+			method: 'POST'
+		})
+		return res
+	}
+	return {setPoints, claimLocation, getPoints, claimVirtual}
 }

@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import PremiumModal from '../../components/features/premiumpage/premiumModal'
 import Arrow from '../../components/images/arrow.svg'
+import { ReactComponent as ArrowRight } from '../../components/images/arrowRight.svg'
 import CrownIcon from '../../components/images/header/crown.svg'
 import usePackageStore from '../../components/store/packagesState'
 import { GetPremiumPackagesInt } from './types/PremiumPackagesInt'
@@ -24,9 +26,11 @@ export const PremiumPage = () => {
 			default: return null
     }
   };
+	const navigate = useNavigate()
 
 	return (
-		<div className='w-full px-5 mt-10'>
+		<div className='w-full px-5 mt-[11vh]'>
+			<ArrowRight className='w-[30px] rotate-180 mt-5' style={{fill: 'white'}} onClick={() => navigate(-1)}/>
 			<div className='flex flex-col items-center'>
 				<img src={CrownIcon} alt="" />
 				<p className='text-center text-2xl font-bold text-myColors-250'>

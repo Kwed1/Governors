@@ -1,11 +1,12 @@
 
+import { initUtils } from '@tma.js/sdk'
 import { jwtDecode } from "jwt-decode"
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Header from '../components/base/header'
 import { ReactComponent as Insta } from '../components/images/Insta.svg'
+import Loadingg from '../components/images/loadingbg.webp'
 import { ReactComponent as Twit } from '../components/images/twitter.svg'
-import Loadingg from '../components/images/Waiting.png'
 import buildState from '../components/store/buildState'
 import useData from '../components/store/dataState'
 import gamesState from '../components/store/gamesState'
@@ -185,6 +186,15 @@ export const NavPanelProvider = ({ children }: NavPanelProviderInt) => {
 		return null
 	}, [location.pathname])
 
+	const openSocialNetwork = (status:string) => {
+		const utils = initUtils()
+		if (status === 'inst') {
+			utils?.openLink('https://www.instagram.com/governors_game/profilecard/?igsh=MXJyd2xzOXFrZnB1Zg==')
+		} else {
+			utils?.openLink('https://x.com/governors_game?s=21&t=oKZdJkkZMwuYJJ7HmCWEfw')
+		}
+	}
+
 	if (loading) {
 		return (
 			<div className="fixed inset-0 flex items-center justify-center bg-gray-900 z-50">
@@ -192,13 +202,17 @@ export const NavPanelProvider = ({ children }: NavPanelProviderInt) => {
 					<img src={Loadingg} alt="" className='h-[100vh] w-[100vh]' />
 					<div className='absolute bottom-[10vh] left-[36%] flex gap-2'>
 
-						<div className='w-[50px] bg-myColors-750 h-[50px] flex flex-col items-center justify-center rounded-full p-3'>
+						<button className='w-[50px] bg-myColors-750 h-[50px] flex flex-col items-center justify-center rounded-full p-3' onClick={() => {
+							openSocialNetwork('inst')
+						}}>
 							<Insta />
-						</div>
+						</button>
 
-						<div className='w-[50px] bg-myColors-750 h-[50px] flex flex-col items-center justify-center rounded-full p-3'>
+						<button className='w-[50px] bg-myColors-750 h-[50px] flex flex-col items-center justify-center rounded-full p-3' onClick={() => {
+							openSocialNetwork('twitter')
+						}}>
 							<Twit />
-						</div>
+						</button>
 
 					</div>
 				</div>
@@ -211,13 +225,12 @@ export const NavPanelProvider = ({ children }: NavPanelProviderInt) => {
 	return (
 		<>
 			<NavContext.Provider value={{ getMissions, getBuildings, getData, getGames }}>
-				<Background page={location.pathname} />
 
 				{memoizedHeader}
 
 				{location.pathname === '/rewards' ? (
 					<>
-						<div className={`fixed w-full h-[80vh] bg-myColors-100 rounded-t-[30px] bottom-0`}>
+						<div className={`fixed w-full h-[78vh] bg-myColors-100 rounded-t-[30px] bottom-0`}>
 							{children}
 							<NavPanel />
 						</div>

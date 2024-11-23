@@ -66,25 +66,31 @@ class UserGameOfflineService:
         return user
 
     @staticmethod
-    def _get_generate_chance_count(status: UserStatus) -> int:
+    def _get_generate_chance_count(lvl: int, status: UserStatus) -> int:
         """Получить количество доступных для генерации точек."""
-        if status == UserStatus.BRONZE:
+        if lvl < 6:
+            return 1
+        elif lvl == 6 or lvl == 7:
             return 2
-        elif status == UserStatus.SILVER:
+        elif lvl == 8 or lvl == 9:
             return 3
-        elif status in {UserStatus.GOLD, UserStatus.DIAMOND}:
+        elif lvl == 10:
             return 4
+
         return 1
 
     @staticmethod
-    def _get_generate_locations_count(status: UserStatus) -> int:
+    def _get_generate_locations_count(lvl: int, status: UserStatus) -> int:
         """Получить количество доступных для генерации точек."""
-        if status == UserStatus.BRONZE:
-            return 7
-        elif status == UserStatus.SILVER:
+        if lvl < 6:
+            return 5
+        elif lvl == 6 or lvl == 7:
+            return 6
+        elif lvl == 8 or lvl == 9:
             return 10
-        elif status in {UserStatus.GOLD, UserStatus.DIAMOND}:
+        elif lvl == 10:
             return 15
+
         return 5
 
     @staticmethod
@@ -146,7 +152,8 @@ class UserGameOfflineService:
 
     async def get_points(self, user_id: UUID) -> GetPointsSchema:
         user = await self._get_user(user_id)
-        generate_max_change = UserGameOfflineService._get_generate_chance_count(user.data.status)
+        generate_max_change = UserGameOfflineService._get_generate_chance_count(
+            user.data.lvl, user.data.status)
         generate_chance = self._calculate_generate_chance(user, generate_max_change)
         claimed_count = sum(1 for point in user.points if point.claimed)
         claim_count = self._claim_count(user.data.lvl)
@@ -166,9 +173,11 @@ class UserGameOfflineService:
     def _calculate_generate_chance(self, user: User, max_count: int) -> int:
         """Вычислить шанс генерации новых точек."""
         if user.data.last_generate is None:
-            return UserGameOfflineService._get_generate_chance_count(user.data.status)
+            return UserGameOfflineService._get_generate_chance_count(user.data.lvl,
+                                                                     user.data.status)
         if (datetime.utcnow() - user.data.last_generate).total_seconds() / 3600 > 24:
-            return UserGameOfflineService._get_generate_chance_count(user.data.status)
+            return UserGameOfflineService._get_generate_chance_count(user.data.lvl,
+                                                                     user.data.status)
         res = max_count - user.data.generate_count
         if res < 0:
             res = 0
@@ -177,12 +186,18 @@ class UserGameOfflineService:
     async def generate_points(self, user_coords: UserCoordinates, user_id: UUID) -> GetPointsSchema:
         user = await self._get_user(user_id)
 
-        generate_max_chanced = UserGameOfflineService._get_generate_chance_count(user.data.status)
+        if user.data.last_generate is not None and (
+                datetime.utcnow() - user.data.last_generate).total_seconds() > 24 * 3600:
+            user.data.generate_count = 0
+
+        generate_max_chanced = UserGameOfflineService._get_generate_chance_count(
+            user.data.lvl, user.data.status)
         if user.data.generate_count > generate_max_chanced:
             raise CustomException('Cannot generate points')
 
         await self.db.execute(delete(UserPoint).where(UserPoint.user_id == user.id))
-        max_count = UserGameOfflineService._get_generate_locations_count(user.data.status)
+        max_count = UserGameOfflineService._get_generate_locations_count(
+            user.data.lvl, user.data.status)
         base_point = Point(user_coords.latitude, user_coords.longitude)
 
         user_points = self._generate_user_points(
@@ -332,29 +347,19 @@ class UserGameOfflineService:
         return False
 
     async def virtual_claim(self, point_id: UUID, user_id: UUID) -> GetPointsSchema:
-        """Собрать виртуальную точку."""
         user = await self._get_user(user_id)
 
         if user.data.virtual_pick_count >= UserGameOfflineService._get_virtual_picks_count(user.data.status):
             raise CustomException('Cannot claim virtual picks')
 
-        for point in user.points:
-            if point.id == point_id:
-                point.claimed = True
-                break
-
-        else:
-            raise CustomException("Point not found")
-
         user.data.virtual_pick_count += 1
-        point_schema = self._build_points_schema(user)
-        await self.db.commit()
-        return point_schema
+        return await self.claim(point_id=point_id, user_id=user_id)
 
     def _build_points_schema(self, user: User) -> GetPointsSchema:
         reward = self._get_reward(user.data.lvl)
         claimed_count = sum(1 for point in user.points if point.claimed)
-        generate_max_chanced = UserGameOfflineService._get_generate_chance_count(user.data.status)
+        generate_max_chanced = UserGameOfflineService._get_generate_chance_count(
+            user.data.lvl, user.data.status)
         schema = [PointSchema.model_validate(point, from_attributes=True) for point in user.points if not point.claimed]
         generate_chance = self._calculate_generate_chance(user, generate_max_chanced)
         claim_count = self._claim_count(user.data.lvl)

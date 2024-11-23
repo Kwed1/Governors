@@ -1,3 +1,4 @@
+import { initUtils } from '@tma.js/sdk'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useRef, useState } from 'react'
@@ -11,6 +12,7 @@ import CrownIcon from '../../../images/homepage/crown.svg'
 import { getDistance, UpdateMapCenter } from '../../../utils/mapUtils'
 import ReachLocation from '../reachLocation/reach-location'
 import { LocationInfo } from '../type'
+import ClaimLocationModal from './ClaimLocationModal'
 import GetPointsApi from './generateLocations/api/get-points'
 import GenerateLocations from './generateLocations/generate-locations'
 import './map.css'
@@ -22,12 +24,18 @@ interface Props {
   open: boolean
 }
 
+export interface ModalInfoInt {
+  diamonds: number,
+  reward:number
+}
+
 interface Marker {
   name: string
   position: [number, number]
   showClick: boolean
   placeCount: number
   total: number
+  diamond_reward?: number,
   game_reward: number
   id: string
   start_at: string
@@ -37,7 +45,7 @@ const createCustomIcon = (text: string) => {
   return L.divIcon({
     html: `
       <div class="royal-marker">
-        <img src="${CrownIcon}" alt="Marker" style="width: 70%; height: 70%; border-radius: 50%;" />
+        <img src="${CrownIcon}" alt="Marker" style="width: 70%; height: 80%; border-radius: 50%;" />
         <div class="marker-text text-myColors-250">${text}</div>
       </div>
     `,
@@ -55,6 +63,11 @@ function Map({ gameData, handleClick, setError }: Props) {
   const once = useRef(false)
   const {getData} = useNecessary()
   const [message, setMessage] = useState<string>('')
+  const [ClaimModal, setClaimModal] = useState<boolean>(false)
+  const [modalInfo, setModalInfo] = useState<ModalInfoInt>({
+    reward: 0,
+    diamonds: 0
+  })
   const [locationInfo, setLocationInfo] = useState<LocationInfo>({
     claimed_count: 0,
     generate_chance: 0,
@@ -64,7 +77,7 @@ function Map({ gameData, handleClick, setError }: Props) {
     reward: 0
   })
 
-  const { setPoints, claimLocation, getPoints } = GetPointsApi()
+  const { setPoints, claimLocation, getPoints, claimVirtual} = GetPointsApi()
 
   const getPointsReq = async () => {
     if (position) {
@@ -79,6 +92,7 @@ function Map({ gameData, handleClick, setError }: Props) {
             showClick: distanceToMarker <= 100,
             placeCount: 0,
             total: 0,
+            diamond_reward: res?.diamond_reward,
             game_reward: res.reward,
             id: res.id,
             start_at: ''
@@ -109,6 +123,7 @@ function Map({ gameData, handleClick, setError }: Props) {
             showClick: distanceToMarker <= 100,
             placeCount: 0,
             total: 0,
+            diamond_reward: point?.diamond_reward,
             game_reward: point.reward,
             id: point.id,
             start_at: ''
@@ -176,11 +191,57 @@ function Map({ gameData, handleClick, setError }: Props) {
     return () => navigator.geolocation.clearWatch(watchId);
   }, [gameData]);
 
-  const claimGenerated = async (id: string) => {
+  const claimGeneratedVirtual = async (id: string,reward:number, diamond:number) => {
+    if (position) {
+    const res = await claimVirtual(id)
+    getData()
+    if (res) {
+      setModalInfo({
+        reward: reward,
+        diamonds: diamond
+      })
+      setClaimModal(true)
+      setMessage(t('snackbarSuccess'))
+      setTimeout(() => {
+        setMessage('')
+      }, 2000)
+      setGeneratedPoints(res.points.map(point => {
+        const markerPosition: [number, number] = [point.latitude, point.longitude]
+        const distanceToMarker = getDistance(position, markerPosition)
+        return {
+          name: 'generated',
+          position: markerPosition,
+          showClick: distanceToMarker <= 100,
+          placeCount: 0,
+          total: 0,
+          game_reward: 0,
+          diamond_reward: point?.diamond_reward,
+          id: point.id,
+          start_at: ''
+        }
+      }))
+      setLocationInfo({
+        claimed_count: res.claimed_count,
+        generate_chance: res.generate_chance,
+        generate_max_chanced: res.generate_max_chanced,
+        claimed_need_to_reward: res.claimed_need_to_reward,
+        virtual_picks: res.virtual_picks,
+        reward: res.reward
+      })
+    }
+  }
+  }
+
+  const claimGenerated = async (id: string,reward:number, diamond:number) => {
     if (position) {
     const res = await claimLocation(id)
     getData()
     if (res) {
+      setModalInfo({
+        reward: reward,
+        diamonds: diamond
+      })
+      setClaimModal(true)
       setMessage(t('snackbarSuccess'))
       setTimeout(() => {
         setMessage('')
@@ -196,6 +257,7 @@ function Map({ gameData, handleClick, setError }: Props) {
           placeCount: 0,
           total: 0,
           game_reward: 0,
+          diamond_reward: point?.diamond_reward,
           id: point.id,
           start_at: ''
         }
@@ -214,16 +276,19 @@ function Map({ gameData, handleClick, setError }: Props) {
 
   const combinedMarkers = [...markers, ...generatedPoints]
   const closestMarker = combinedMarkers.find(marker => marker.showClick)
+  const utils = initUtils()
+
   
   return (
     <div className="relative">
       <div className="w-full flex flex-col justify-center items-center" style={{ position: 'relative', width: '100%' }}>
+      
         <div className='absolute top-0 w-full' style={{ zIndex: 9999 }}>
           <ReachLocation locationInfo={locationInfo} />
         </div>
         <MapContainer
           center={position || [0, 0]}
-          zoom={13}
+          zoom={18}
           style={{ height: '800px', width: '100%', margin: '0 auto', position: 'relative' }}
           attributionControl={false}
           zoomControl={false}
@@ -246,7 +311,8 @@ function Map({ gameData, handleClick, setError }: Props) {
                     <Popup>
                       <p className='text-myColors-300'>{formatDateString(marker.start_at)}</p>
                       <p className='flex gap-1 text-myColors-300'>{t('adminReward')} <span className='text-myColors-250 font-bold'>{marker.game_reward === -1 ? t("claimedReward") : marker.game_reward}</span></p>
-                      <button className='mt-2 bg-myColors-250 text-white font-bold px-5 p-2 rounded-xl'>{t('checkGooleMap')}</button>
+                      <button className='mt-2 bg-myColors-250 text-white font-bold px-5 p-2 rounded-xl'
+                      onClick={() => utils?.openLink(`https://www.google.com/maps?q=${marker?.position[0]},${marker?.position[1]}`)}>{t('checkGooleMap')}</button>
                     </Popup>
                 </Marker>
                 ) : (
@@ -266,7 +332,7 @@ function Map({ gameData, handleClick, setError }: Props) {
                   {locationInfo?.virtual_picks && (
                     <Popup>
                       <button className='bg-myColors-250 text-white font-bold px-5 p-2 rounded-xl'
-                      onClick={() => claimGenerated(marker?.id)}>
+                      onClick={() => claimGeneratedVirtual(marker?.id, marker?.game_reward, marker?.diamond_reward || 0)}>
                         Claim
                       </button>
                     </Popup>
@@ -290,7 +356,7 @@ function Map({ gameData, handleClick, setError }: Props) {
           {closestMarker && closestMarker?.game_reward !== -1 ? (
             <button
               className="w-[95px] h-[95px] p-2 bg-opacity-35 bg-black rounded-full flex items-center justify-center"
-              onClick={() => closestMarker?.name === '' ? handleClick(closestMarker?.id) : claimGenerated(closestMarker.id)}
+              onClick={() => closestMarker?.name === '' ? handleClick(closestMarker?.id) : claimGenerated(closestMarker.id, closestMarker?.game_reward, closestMarker?.diamond_reward || 0)}
             >
               <div className='w-full h-full p-1 bg-black rounded-full flex items-center justify-center flex-col'>
                 <p className='text-center text-[14px]'>I'm here!</p>
@@ -308,7 +374,9 @@ function Map({ gameData, handleClick, setError }: Props) {
         </div>
       </div>
       <SuccessSnackbar message={message} />
+      {ClaimModal && <ClaimLocationModal modalInfo={modalInfo} setClaimModal={setClaimModal} />}
     </div>
+   
   )
 }
 

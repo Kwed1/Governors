@@ -94,16 +94,13 @@ const SwipeUpPanel: React.FC<SwipeUpPanelProps> = ({ height = '85vh', visibleHei
 
   return (
     <>
-        <div className='bottom-0 w-full fixed h-[89vh]'>
-            {/* <div
-              className='absolute top-[4px] left-[42%] right-0 h-[3px] w-[70px] bg-myColors-300 rounded-full'></div> */}
-          <div className='h-full'>
-            <Map gameData={gameData} handleClick={handleClick} setError={setError} open={open} />
-          </div>
-
+      <div className='bottom-0 w-full fixed max-h-[81vh] custom-sm:h-[78vh]'>
+          {/* <div
+            className='absolute top-[4px] left-[42%] right-0 h-[3px] w-[70px] bg-myColors-300 rounded-full'></div> */}
+        <div className='h-full'>
+          <Map gameData={gameData} handleClick={handleClick} setError={setError} open={open} />
         </div>
-
-
+      </div>
       <SuccessSnackbar message={message} />
       <ErrorSnackbar error={error} onClose={() => setError('')} />
     </>

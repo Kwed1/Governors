@@ -1,15 +1,17 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ReactComponent as ArrowRight } from '../../components/images/arrowRight.svg'
 import useLevelsStore from '../../components/store/levelState'
 import useStore from '../../components/store/zustand'
 import ModalOfLevel from '../../components/ui/levelpage/ModalOfLevel'
 import { GetLevelsType } from './type'
-
 
 export default function Levelpage() {
 	const {levels} = useLevelsStore()
 	const {lvl} = useStore()
 	const [modalInfo, setModalInfo] = useState<GetLevelsType | null>(null)
 	const [isOpen, setIsOpen] = useState<boolean>(false)
+	const navigate = useNavigate()
 
 	const handleOpenModal = (info:GetLevelsType) => {
 		setModalInfo(info)
@@ -17,7 +19,8 @@ export default function Levelpage() {
 	}
 	
 	return (
-		<div className='w-full px-5 mt-10'>
+		<div className='w-full px-5 mt-[11vh]'>
+			<ArrowRight className='w-[30px] rotate-180 mt-5' style={{fill: 'white'}} onClick={() => navigate(-1)}/>
 			<p className='text-2xl text-white font-bold text-center'>
 				Level
 			</p>
@@ -25,11 +28,11 @@ export default function Levelpage() {
 			<div className='mt-5 flex flex-col gap-3'>
 			{/* 0 - 5 */}
 			{levels?.filter(level => level.lvl >= 1 && level.lvl <= 5).map((level, i) => (
-				<button className={`w-full p-2 flex justify-between items-center text-white rounded text-lg ${lvl === level.lvl && 'bg-myColors-200'}`} key={`level-1-${i}`} onClick={()=>handleOpenModal(level)}>
+				<button className={`w-full p-2 flex justify-between items-center text-white rounded text-lg z-50 ${lvl === level.lvl && 'bg-myColors-200'}`} key={`level-1-${i}`} onTouchStart={()=>handleOpenModal(level)}>
 					<p>Level {level?.lvl} <span style={{color:'#727272'}}>({level?.reward} GT)</span> - {level?.locations} locations</p>
-					<div className='w-[40px] h-[40px] bg-black rounded-full flex justify-center items-center text-xl'>
+					<p className='w-[40px] h-[40px] bg-black rounded-full flex justify-center items-center text-xl'>
 						?
-					</div>
+					</p>
 				</button>
 			))}
 		{/* 6 - 7 */}

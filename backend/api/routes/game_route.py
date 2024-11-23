@@ -27,6 +27,11 @@ async def generate_points(user_coords: UserCoordinates, request: Request, servic
 async def claim(point_id: UUID, request: Request, service: UserGameOfflineService = Depends()):
     return await service.claim(point_id=point_id, user_id=request.state.login_id)
 
+@router.post('/virtual_claim/{point_id}')
+async def claim_virtual(point_id: UUID, request: Request, service: UserGameOfflineService =
+Depends()):
+    return await service.virtual_claim(point_id=point_id, user_id=request.state.login_id)
+
 @router.post('/online')
 @authorized
 async def add_game_async(dto: CreateOnlineGameDto, service: GameService = Depends()):
